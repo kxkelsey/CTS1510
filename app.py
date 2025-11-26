@@ -80,12 +80,16 @@ if st.session_state.logged_in:
 
         with st.expander("➕ Add New Incident"):
             with st.form("new_incident_form"):
-                title = st.text_input("Incident Title")
-                severity = st.selectbox("Severity", ["Low", "Medium", "High", "Critical"])
-                status = st.selectbox("Status", ["Open", "In Progress", "Resolved"])
+                title = st.text_input("Incident Title", key="new_incident_title")
+                severity = st.selectbox("Severity", ["Low", "Medium", "High", "Critical"], key="new_incident_sev")
+                status = st.selectbox("Status", ["Open", "In Progress", "Resolved"], key="new_incident_status")
                 submitted = st.form_submit_button("Add Incident")
                 if submitted and title:
-                    st.session_state.cyber_incidents.append({"title": title, "severity": severity, "status": status})
+                    st.session_state.cyber_incidents.append({
+                        "title": title,
+                        "severity": severity,
+                        "status": status
+                    })
                     st.success("Incident added")
                     st.rerun()
 
@@ -121,8 +125,8 @@ if st.session_state.logged_in:
 
         with st.expander("➕ Create New Ticket"):
             with st.form("new_ticket"):
-                title = st.text_input("Issue")
-                priority = st.selectbox("Priority", ["Low", "Medium", "High", "Critical"])
+                title = st.text_input("Issue", key="new_ticket_title")
+                priority = st.selectbox("Priority", ["Low", "Medium", "High", "Critical"], key="new_ticket_priority")
                 submitted = st.form_submit_button("Create")
                 if submitted and title:
                     st.session_state.it_tickets.append({"title": title, "priority": priority, "status": "Open"})
@@ -135,11 +139,11 @@ else:
 
     with tab_login:
         st.subheader("Login")
-        username = st.text_input("Username", key="login_user")
+        username = st.text_input("Username", key="login_username")
 
-        show_pass_login = st.checkbox("Show password", key="show_login")
+        show_pass_login = st.checkbox("Show password", key="login_showpass")
         pass_type_login = "text" if show_pass_login else "password"
-        password = st.text_input("Password", type=pass_type_login, key="login_pass")
+        password = st.text_input("Password", type=pass_type_login, key="login_password")
 
         if st.button("Log in", type="primary", use_container_width=True):
             if username in st.session_state.users and st.session_state.users[username] == password:
@@ -152,13 +156,13 @@ else:
 
     with tab_register:
         st.subheader("Create Account")
-        new_username = st.text_input("Choose username", key="reg_user")
+        new_username = st.text_input("Choose username", key="register_username")
 
-        show_pass_reg = st.checkbox("Show password", key="show_reg")
+        show_pass_reg = st.checkbox("Show password", key="register_showpass")
         pass_type_reg = "text" if show_pass_reg else "password"
 
-        new_password = st.text_input("Password", type=pass_type_reg, key="reg_pass")
-        confirm_password = st.text_input("Confirm password", type=pass_type_reg, key="reg_confirm")
+        new_password = st.text_input("Password", type=pass_type_reg, key="register_password")
+        confirm_password = st.text_input("Confirm password", type=pass_type_reg, key="register_confirm")
 
         if st.button("Create account", type="primary", use_container_width=True):
             if not new_username or not new_password:
